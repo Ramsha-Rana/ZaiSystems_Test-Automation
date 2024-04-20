@@ -1,0 +1,46 @@
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+class WebsiteTestCase(unittest.TestCase):
+
+    def setUp(self):
+        # Set up the browser instance
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+
+    def test_user_friendly_and_efficient(self):
+        # Open the website URL
+        self.driver.get("https://www.zaisystems.com/")
+
+        # Test navigation efficiency
+        try:
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".navbar-nav a[href='/services/']"))).click()
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".navbar-nav a[href='/']"))).click()
+        except:
+            self.fail("Navigation is not efficient")
+
+        # Test page loading speed
+        load_time = self.driver.execute_script("return (window.performance.timing.loadEventEnd - window.performance.timing.navigationStart);")
+        max_load_time = 5000  # Adjust this threshold as needed (in milliseconds)
+        self.assertLess(load_time, max_load_time, "Page loading speed is slow")
+
+        # Test responsiveness
+        window_width = self.driver.execute_script("return window.innerWidth;")
+        min_window_width = 1024  # Adjust this threshold as needed (in pixels)
+        self.assertGreaterEqual(window_width, min_window_width, "Website is not responsive")
+
+        # Test user experience (you can add more specific checks here)
+        try:
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".navbar-brand"))).click()
+        except:
+            self.fail("User experience is poor")
+
+    def tearDown(self):
+        # Close the browser instance
+        self.driver.quit()
+
+if __name__ == "__main__":
+    unittest.main()
