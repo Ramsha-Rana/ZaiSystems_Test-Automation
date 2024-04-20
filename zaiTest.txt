@@ -1,0 +1,22 @@
+import unittest
+from selenium import webdriver
+
+class WebsiteTestCase(unittest.TestCase):
+
+    def setUp(self):
+        # Set up the browser instance
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+
+    def test_website_load(self):
+        # Open the website URL
+        self.driver.get("https://www.zaisystems.com/")
+        # Verify that the page title is as expected
+        self.assertEqual("Zai Systems - Transforming ideas into great software solutions", self.driver.title)
+
+    def tearDown(self):
+        # Close the browser instance
+        self.driver.quit()
+
+if __name__ == "__main__":
+    unittest.main()
